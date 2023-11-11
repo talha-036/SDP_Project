@@ -1,0 +1,2855 @@
+#include <iostream>
+#include <conio.h>
+#include <fstream>
+#include <string.h>
+#include <iomanip>
+#include <string>
+#include <ctime>
+#include <sstream>
+#include <chrono>
+#include <thread>
+#include <Windows.h>
+#include <vector>
+using namespace std;
+
+
+// ANSI escape codes for text color
+const string RESET_COLOR     = "\033[0m";           //Default
+      string SELECTED_COLOR;                   // Blue
+const string EXIT_COLOR      = "\033[1;31m";       // Red
+
+      string BLUE;
+const string RED         = "\033[41m";   // RED
+const string YELLOW      = "\033[43m";  // YELLOW
+const string GREEN       = "\033[42m"; // GREEN
+const string CYAN_BG     = "\u001b[46m";
+
+const string Text_BLUE   = "\033[1;34m";
+const string Text_RED    = "\033[1;31m";
+const string Text_GREEN  = "\033[1;32m";
+const string Text_YELLOW = "\033[1;33m";
+
+
+
+//Setting Function and Classes
+//Sound
+class MakeSound
+{
+public:
+    int x;
+    void beep()
+    {
+        Beep(x, 10);
+      //Beep(Frequency, Time)
+    }
+};
+
+MakeSound OBJ;
+
+
+
+void displaySoundOption(int selectedOption);
+void SoundSimulationAndSelection();
+void StartSound();
+void TurnOnSound();
+
+void displaySettingOption(int selectedOption);
+void StartSetting();
+
+//------------------end--------------------
+
+//Color--------------------------
+void displayColorOption(int selectedOption);
+void ColorSimulationAndSelection();
+void StartColor();
+void TurnOnColor();
+//--------------end------------------
+
+//Reset
+void DeleteFile(string filename);
+void ResetAll();
+
+//-----end--------
+
+
+//-------Starting functions--------
+void displayMenu(int selectedOption);
+void StartMainMenu();
+
+
+int ConnectorForSelectedLine=0;//1
+string connector1;//2
+int connector2;
+string SubjectName;//Global-19 date
+
+string spaceprinter(int n);
+int    SubjectLineCounter(string FileName);
+string SubjectDisplayTable(int selectoption,string File);
+string SubjectSelectLine(string File);
+int    linecounter( string FileName);
+void   DisplayTable(int selectoption,string File);
+int    SelectLine(string File);
+string InputTopicName();
+void   DisplayPreparation(int selectedOption, string File);
+void   DisplayNote(int selectedOption, string File);
+string SelectPreparationStatus(string File);
+string SelectNoteStatus(string File);
+string PreparedDataForMerge(string File);
+string GetDateandIndex(int lineNum, string filename);
+string MergeDataAndFinalRow(string File);
+void   printFinalResult(string File, string PreparedLine, int selectedLine);
+void   ModifyData(string fileName);
+
+string Blue0,Blue1,Blue2,Blue3,Blue4,Blue5,Blue6;
+
+void displayweekday(int selectedOption,int marked);
+bool isWeekday(tm& date, string& weekday);
+void slowPrint(const string& text, int delay = 5);
+void GenerateTable_AddOption_CreateFile();
+
+void displayAnimalArt( string animalArt);
+void Game();
+
+void StartViewStatus()
+{
+    string subjectName=SubjectSelectLine("Subject.txt");
+    ModifyData(subjectName+".txt");
+}
+
+//Last Work
+void displayCreateDeleteSubjectOption(int selectedOption);
+void StartCreateDeleteSubject();
+void DeleteSingleSubject();
+void RemoveSubjectnameFromSubject(string FiletoDelete);
+
+void EnterTodaysInfo();
+
+void printNewLine(int num);
+
+int main()
+{
+
+    TurnOnColor();
+    TurnOnSound();
+    StartMainMenu();
+    return 0;
+}
+
+void displayMenu(int selectedOption)
+{
+    system("cls");
+    // cout << "\033[H";  // Clear the console screen (for Windows)
+
+    string color= (selectedOption==5)? EXIT_COLOR : RESET_COLOR;
+
+
+    cout<< color<< R"(
+                       _____  _               _          _______                 _
+                      / ____|| |             | |        |__   __|               | |
+                     | (___  | |_  _   _   __| | _   _     | | _ __  __ _   ___ | | __ ___  _ __
+                      \___ \ | __|| | | | / _` || | | |    | || '__|/ _` | / __|| |/ // _ \| '__|
+                      ____) || |_ | |_| || (_| || |_| |    | || |  | (_| || (__ |   <|  __/| |
+                     |_____/  \__| \__,_| \__,_| \__, |    |_||_|   \__,_| \___||_|\_\\___||_|
+                                                  __/ |
+                                                 |___/
+)";
+    printNewLine(3);
+
+    cout << (selectedOption == 0 ? SELECTED_COLOR : RESET_COLOR) << (selectedOption == 0 ? "\t\t\t\t\t-->   " : "\t\t\t\t\t      ") << "     View Status\n\n";
+    cout << (selectedOption == 1 ? SELECTED_COLOR : RESET_COLOR) << (selectedOption == 1 ? "\t\t\t\t\t-->   " : "\t\t\t\t\t      ") <<"  Enter Today’s Info\n\n";
+    cout << (selectedOption == 2 ? SELECTED_COLOR : RESET_COLOR) << (selectedOption == 2 ? "\t\t\t\t\t-->   " : "\t\t\t\t\t      ") << "Create/Delete Subject\n\n";
+    cout << (selectedOption == 3 ? SELECTED_COLOR : RESET_COLOR) << (selectedOption == 3 ? "\t\t\t\t\t-->   " : "\t\t\t\t\t      ") << "  Guess The Animal\n\n";
+    cout << (selectedOption == 4 ? SELECTED_COLOR : RESET_COLOR) << (selectedOption == 4 ? "\t\t\t\t\t-->   " : "\t\t\t\t\t      ") << "      Settings\n\n";
+    cout << (selectedOption == 5 ? EXIT_COLOR     : RESET_COLOR) << (selectedOption == 5 ? "\t\t\t\t\t-->   " : "\t\t\t\t\t      ") << "        Exit\n\n"<<RESET_COLOR;
+
+    printNewLine(4);
+
+    char down =25;
+    char up =24;
+    cout<<"   "<<SELECTED_COLOR<<"Enter"<<RESET_COLOR<<" Select";
+    cout<<" ";
+    cout<<"   "<<SELECTED_COLOR<<up<<" "<<RESET_COLOR;
+    cout<<"Go Up";
+    cout<<"  ";
+    cout<<"  "<<SELECTED_COLOR<<down<<" "<<RESET_COLOR;
+    cout<<"Go Down";
+
+
+    cout<<endl;
+}
+
+
+void StartMainMenu()
+{
+    const int numOptions = 6;
+    int selectedOption = 0;
+    char key;
+
+    do
+    {
+        displayMenu(selectedOption);
+
+        key = getch();  // Get a single character without waiting for Enter
+
+        switch (key)
+        {
+        case 72:  // Up Arrow
+            selectedOption = (selectedOption - 1 + numOptions) % numOptions;
+            OBJ.beep();
+            break;
+        case 80:  // Down Arrow
+            selectedOption = (selectedOption + 1) % numOptions;
+            OBJ.beep();
+            break;
+        }
+    }
+
+    while (key != 13);  // Enter key
+    OBJ.beep();
+
+
+    switch (selectedOption)
+    {
+    case 0:
+        StartViewStatus();
+        break;
+    case 1:
+       EnterTodaysInfo();
+        break;
+    case 2:
+         StartCreateDeleteSubject();
+        break;
+    case 3:
+       Game();
+        break;
+    case 4:
+        StartSetting();
+        break;
+    case 5:
+        cout << EXIT_COLOR << "Bye! See you again\n" << RESET_COLOR;
+        exit(0);
+        break;
+    }
+}
+
+///********************///**********************************///*********************************///***************************************///
+///********************///**********************************///*********************************///***************************************///
+///********************///**********************************///*********************************///***************************************///
+///********************///**********************************///*********************************///***************************************///
+///********************///**********************************///*********************************///***************************************///
+///********************///**********************************///*********************************///***************************************///
+///********************///**********************************///*********************************///***************************************///
+///********************///**********************************///*********************************///***************************************///
+///********************///**********************************///*********************************///***************************************///
+///********************///**********************************///*********************************///***************************************///
+///********************///**********************************///*********************************///***************************************///
+///********************///**********************************///*********************************///***************************************///
+///********************///**********************************///*********************************///***************************************///
+
+
+
+///-*-*-*-*-*-*-*-*-*--*-*-*-*-*-*-*-*-*--*-*-*-*-*-*-*-*-*- STEP 1 -*-*-*-*-*-*-*-*-*--*-*-*-*-*-*-*-*-*--*-*-*-*-*-*-*-*-*-
+
+// Counting how much line are there in a File
+int linecounter( string FileName)
+{
+
+    fstream File;
+    File.open(FileName, ios::in);
+    string TempHolder;
+    int CountLine=1;
+
+    while(getline(File,TempHolder))
+    {
+        CountLine++;
+    }
+    //Using this equation we are avoiding the lines and pointing directly to the data;
+    return (CountLine-2)/2;
+}
+
+//Printing and Displaying the File contents with single row color;
+void DisplayTable(int selectoption,string File)
+{
+    system("cls");
+    selectoption = 2*selectoption+4;
+
+
+    fstream dataTable;
+    dataTable.open(File, ios::in);
+
+    string TempHolder;
+
+    int i=1;
+    while(getline(dataTable,TempHolder))
+    {
+
+        if(i==selectoption )
+            cout<<BLUE<<TempHolder<<RESET_COLOR<<endl;
+
+        else
+            cout<<TempHolder<<endl;
+
+        i++;
+    }
+
+}
+
+//Using this function we can select string of "Line" from table by arrow key.
+int SelectLine(string File)
+{
+    int selectOption =1;
+    int totalline = linecounter(File);
+    char key;
+
+    do
+    {
+        DisplayTable(selectOption,File);
+
+        key = getch();
+
+        switch (key)
+        {
+        case 72:  // Up Arrow
+
+            OBJ.beep();
+            selectOption--;
+            if(selectOption<1)
+            selectOption =totalline-2;
+            break;
+
+        case 80:  // Down Arrow
+
+            OBJ.beep();
+            selectOption++;
+            if(selectOption>= totalline-1)
+            selectOption =1;
+            break;
+
+        case 8:
+                OBJ.beep();
+                StartViewStatus();
+                break;
+
+        }
+
+    }
+    while (key != 13);  // Enter key
+    OBJ.beep();
+    ConnectorForSelectedLine = selectOption;
+    return selectOption;
+}
+
+///We can Display the data from a File using those function. As well as we can select the line we want to replace and store the line number in a variable.
+///-*-*-*-*-*-*-*-*-*--*-*-*-*-*-*-*-*-*--*-*-*-*-*-*-*-*-*- COMPLETED(STEP 1) -*-*-*-*-*-*-*-*-*--*-*-*-*-*-*-*-*-*--*-*-*-*-*-*-*-*-*-
+
+
+///-*-*-*-*-*-*-*-*-*--*-*-*-*-*-*-*-*-*--*-*-*-*-*-*-*-*-*- STEP 2 -*-*-*-*-*-*-*-*-*--*-*-*-*-*-*-*-*-*--*-*-*-*-*-*-*-*-*-*-*-*-
+
+//For taking "Topic" input from user
+string InputTopicName()
+{
+    cout<<"Enter the topic name    : ";
+    string EditedTopicName;
+    getline(cin, EditedTopicName);
+    connector1=EditedTopicName;
+    return EditedTopicName;
+}
+
+//This function is used to Represent text of "Preparation" in the display && Also designed for print the previous text which were disappear due to system("cls").
+void DisplayPreparation(int selectedOption, string File)
+{
+
+    system("cls");
+    DisplayTable(ConnectorForSelectedLine,File); //For printing previous data
+
+    cout<<"Enter the topic name    : ";
+    cout<<connector1<<endl<<endl;
+
+
+    cout<<"Enter Preparation Status: ";
+    cout<< (selectedOption == 1 ? RED : RESET_COLOR) <<"Low   \n"<<RESET_COLOR;
+    cout<<"                          ";
+    cout<< (selectedOption == 2 ? YELLOW : RESET_COLOR) <<"Medium\n"<<RESET_COLOR;
+    cout<<"                          ";
+    cout<< (selectedOption == 3 ? GREEN : RESET_COLOR) <<"High  \n"<<RESET_COLOR;
+
+    connector2=selectedOption;
+}
+
+//This function is used to Represent text of "Note" in the display && Also designed for print the previous text which were disappear due to system("cls").
+void DisplayNote(int selectedOption, string File)
+{
+
+    system("cls");
+    DisplayTable(ConnectorForSelectedLine,File); //For printing previous data
+    cout<<"Enter the topic name    : ";
+    cout<<connector1<<endl<<endl;
+
+    cout<<"Enter Preparation Status: ";
+
+    cout << (connector2 == 1 ? RED : RESET_COLOR) <<"Low   \n"<<RESET_COLOR;
+    cout<<"                          ";
+    cout << (connector2 == 2 ? YELLOW : RESET_COLOR) <<"Medium\n"<<RESET_COLOR;
+    cout<<"                          ";
+    cout << (connector2 == 3 ? GREEN : RESET_COLOR) <<"High  \n"<<RESET_COLOR<<endl;
+
+
+
+
+    cout<<"Do you have the note?   : ";
+    cout << (selectedOption == 1 ? GREEN: RESET_COLOR) <<"Yes\n"<<RESET_COLOR;
+    cout<<"                          ";
+    cout << (selectedOption == 2 ? RED : RESET_COLOR) <<"No \n"<<RESET_COLOR;
+
+
+
+}
+
+//Using this function we can select string of "Preparation" by arrow key.
+string SelectPreparationStatus(string File)
+{
+    int selectOption =1;
+    int totalline = 3;
+    char key;
+
+    do
+    {
+        DisplayPreparation(selectOption,File);
+
+        key = getch();
+
+        switch (key)
+        {
+        case 72:  // Up Arrow
+
+            OBJ.beep();
+            selectOption--;
+            if(selectOption<1)
+                selectOption =totalline;
+            break;
+
+
+        case 80:  // Down Arrow
+
+            OBJ.beep();
+            selectOption++;
+            if(selectOption> totalline)
+                selectOption =1;
+            break;
+
+        case 27:  // ESC Key
+
+            OBJ.beep();
+            SelectLine(File);
+            break;
+        }
+
+    }
+
+    while (key != 13);  // Enter key
+    OBJ.beep();
+    string Preparation;
+
+    if(selectOption==1)
+    {
+        Preparation = "Low";
+    }
+
+    if(selectOption==2)
+    {
+        Preparation = "Medium";
+    }
+
+    if(selectOption==3)
+    {
+        Preparation = "High";
+    }
+
+    return Preparation;
+
+}
+
+//Using this function we can select string of "note" by arrow key.
+string SelectNoteStatus(string File)
+{
+    int selectOption =1;
+    int totalline = 2;
+    char key;
+
+    do
+    {
+        DisplayNote(selectOption,File);
+
+        key = getch();
+
+        switch (key)
+        {
+        case 72:  // Up Arrow
+
+            OBJ.beep();
+            selectOption--;
+            if(selectOption<1)
+                selectOption =totalline;
+            break;
+
+
+        case 80:  // Down Arrow
+
+            OBJ.beep();
+            selectOption++;
+            if(selectOption> totalline)
+                selectOption =1;
+            break;
+
+        case 27:  // ESC Key
+
+            OBJ.beep();
+            SelectLine(File);
+            break;
+        }
+        }
+
+
+
+    while (key != 13);  // Enter key
+
+    string Note;
+
+    if(selectOption==1)
+    {
+        Note = "Yes";
+    }
+
+    if(selectOption==2)
+    {
+        Note = "No";
+    }
+
+    return Note;
+
+}
+///From those function we can take user input of Topic,Preparation and Note and also visually represent them;
+///Step 2.1 completed*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+
+
+//This function will be use to maintain proper distance between strings in a table.
+string spaceprinter(int n)
+{
+    string space=" ";
+    string spaceCollector;
+    for(int i=0;i<n;i++)
+    {
+        spaceCollector = space + spaceCollector;
+    }
+    return spaceCollector;
+}
+
+
+//This is the Last function of this work group.This use all the data and arrange them in a string
+string PreparedDataForMerge(string File)
+{
+    string Topic = InputTopicName();
+
+    string Preparation = SelectPreparationStatus(File);
+
+    string Note = SelectNoteStatus(File);
+
+    string FinalData = " | "+Topic+spaceprinter(42-Topic.length())+"|"+
+                       spaceprinter(5)+Preparation+ spaceprinter(11-Preparation.length())+"|"+
+                       spaceprinter(2)+Note+spaceprinter(5-Note.length())+"|";
+
+    return   FinalData;
+
+}
+///From those function we can Arrange the data for a table and store them is a string;
+///-*-*-*-*-*-*-*-*-*--*-*-*-*-*-*-*-*-*--*-*-*-*-*-*-*-*-*- COMPLETED(STEP 2) -*-*-*-*-*-*-*-*-*--*-*-*-*-*-*-*-*-*--*-*-*-*-*-*-*-*-*-
+
+//function to extract date and index from deleted row
+string GetDateandIndex(int lineNum, string filename)
+{
+    fstream file;
+    file.open(filename,ios::in | ios::out );
+    string line,temp;
+
+    int n=1;
+    while(getline(file,line))
+    {
+        if(n==2*lineNum+4)
+        {
+            temp = line; // storing removed line in temp
+        }
+
+        n++;
+    }
+    file.close();
+
+    //Deleting unnecessary data
+    string truncatedString = temp.substr(0, 34);
+
+    return truncatedString;
+}
+
+string MergeDataAndFinalRow(string File)
+{
+
+    int LineNumber = SelectLine(File);
+
+    string Data        = PreparedDataForMerge(File);
+    string DateandIndex= GetDateandIndex(LineNumber,File);
+
+    return DateandIndex+Data;
+}
+
+///-----------------------------------16-OCT-2023---------------------------
+void printFinalResult(string File, string PreparedLine, int selectedLine)
+{
+   // Step 1: Open  file
+    string inputFileName = File;
+    string tempFileName = "temp.txt";
+
+    ifstream inputFile(inputFileName);//read from the file.
+    ofstream tempFile(tempFileName); // write data to the file.
+
+
+    // Step 2: Overwrite the selected line with user input in the temp file
+
+    string line;
+
+    int lineNumber = 1;
+    inputFile.clear();
+    inputFile.seekg(0);
+
+    while (getline(inputFile, line))
+    {
+        if (lineNumber == selectedLine*2+4)
+        {
+            tempFile << PreparedLine << endl;
+        }
+        else
+        {
+            tempFile << line << endl;
+        }
+        lineNumber++;
+    }
+
+    // Step 3: Close the files
+    inputFile.close();
+    tempFile.close();
+
+    // Step 4: Transfer data from temp.txt to data.txt
+    ifstream tempFileInput(tempFileName);
+    ofstream dataFileOutput(inputFileName);
+
+
+    while (getline(tempFileInput, line))
+    {
+        dataFileOutput << line << endl;
+    }
+
+    tempFileInput.close();
+    dataFileOutput.close();
+
+    // Step 5: Delete temp.txt
+    remove(tempFileName.c_str());
+
+
+    // Step 6: Print the updated data.txt file
+    ifstream updatedFile(inputFileName);
+
+
+    updatedFile.close();
+
+}
+
+void ModifyData(string fileName)
+{
+   while(true)
+    {
+        string line = MergeDataAndFinalRow(fileName);
+        printFinalResult(fileName,line,ConnectorForSelectedLine);
+    }
+}
+
+///-----------------------------------19-OCT-2023---------------------------Menu Option
+
+
+
+int SubjectLineCounter(string FileName)
+{
+
+    ifstream File;
+    File.open(FileName);
+
+    string line;
+
+    int lineCount = 1;
+
+      while (getline(File, line))
+    {
+        cout<<line<<endl;
+        lineCount++;
+    }
+
+    return lineCount;
+}
+
+
+
+string SubjectDisplayTable(int selectoption,string File)
+{
+    system("cls");
+
+ cout<< R"(
+   _____          _                 _                  _____           _       _                 _
+  / ____|        | |               | |                / ____|         | |     (_)               | |
+ | (___     ___  | |   ___    ___  | |_      __ _    | (___    _   _  | |__    _    ___    ___  | |_
+  \___ \   / _ \ | |  / _ \  / __| | __|    / _` |    \___ \  | | | | | '_ \  | |  / _ \  / __| | __|
+  ____) | |  __/ | | |  __/ | (__  | |_    | (_| |    ____) | | |_| | | |_) | | | |  __/ | (__  | |_
+ |_____/   \___| |_|  \___|  \___|  \__|    \__,_|   |_____/   \__,_| |_.__/  | |  \___|  \___|  \__|
+                                                                             _/ |
+                                                                            |__/
+)";
+    ifstream dataTable;
+    dataTable.open(File);
+
+    string TempHolder;
+    string SubjectName;
+
+    int i=1;
+    while(getline(dataTable,TempHolder))
+    {
+
+        if(i==selectoption )
+            {
+                cout<<"    "<<BLUE<<i<<". "<<TempHolder<<RESET_COLOR<<endl;
+                SubjectName=TempHolder;
+            }
+
+        else
+            cout<<"    "<<i<<". "<<TempHolder<<endl;
+
+        i++;
+    }
+
+    if(i==1)
+    {
+        cout<<endl;
+        cout<<endl;
+        slowPrint("    "+Text_RED+"No Subject to show. "+RESET_COLOR+"\n\n    First create a Subject from:  "+Text_YELLOW+" 'Create/Delete Subject'"+RESET_COLOR);
+        cout<<endl;
+        cout<<endl;
+        printNewLine(13);
+        slowPrint("    Press "+SELECTED_COLOR+"any key"+RESET_COLOR+" to return to main menu ");
+
+        char st;
+        st=getch();
+        if(st==13)
+        {
+        OBJ.beep();
+         StartMainMenu();
+        }
+        else
+        {
+        OBJ.beep();
+        StartMainMenu();
+        }
+
+    }
+
+    else
+    {
+    printNewLine(20-i);;
+    char down =25;
+    char up =24;
+    cout<<"   "<<SELECTED_COLOR<<"Enter"<<RESET_COLOR<<" Select";
+    cout<<" ";
+    cout<<"   "<<SELECTED_COLOR<<"Backspace"<<RESET_COLOR<<" Main Menu";
+    cout<<" ";
+    cout<<"   "<<SELECTED_COLOR<<up<<" "<<RESET_COLOR;
+    cout<<"Go Up";
+    cout<<"  ";
+    cout<<"  "<<SELECTED_COLOR<<down<<" "<<RESET_COLOR;
+    cout<<"Go Down";
+
+    }
+
+    return SubjectName;
+}
+
+//Using this function we can select string of "Line" from table by arrow key.
+string SubjectSelectLine(string File)
+{
+    string SubjectNameT1;
+    int selectOption =1;
+    int totalline = SubjectLineCounter(File);
+    char key;
+
+    do
+    {
+        SubjectNameT1= SubjectDisplayTable(selectOption,File);
+
+        key = getch();
+
+        switch (key)
+        {
+        case 72:  // Up Arrow
+
+            OBJ.beep();
+            selectOption--;
+            if(selectOption<1)
+            selectOption =totalline-1;
+            break;
+
+        case 80:  // Down Arrow
+
+            OBJ.beep();
+            selectOption++;
+            if(selectOption>= totalline)
+            selectOption =1;
+            break;
+
+        case 8://Backspace
+             OBJ.beep();
+             StartMainMenu();
+
+        }
+
+    }
+    while (key != 13);  // Enter key
+    OBJ.beep();
+    return SubjectNameT1;
+}
+///********************///**********************************///*********************************///***************************************///
+///********************///**********************************///*********************************///***************************************///
+///********************///**********************************///*********************************///***************************************///
+///********************///**********************************///*********************************///***************************************///
+///********************///**********************************///*********************************///***************************************///
+///********************///**********************************///*********************************///***************************************///
+///********************///**********************************///*********************************///***************************************///
+///********************///**********************************///*********************************///***************************************///
+///********************///**********************************///*********************************///***************************************///
+///********************///**********************************///*********************************///***************************************///
+///********************///**********************************///*********************************///***************************************///
+///********************///**********************************///*********************************///***************************************///
+///********************///**********************************///*********************************///***************************************///
+
+
+void displayweekday(int selectedOption,int marked)
+{
+   system("cls");
+   // std::cout << "\033[H";  // Clear the console screen (for Windows)
+   cout<<"Please specify the day for your class session: \n"<<endl;
+
+
+    if(marked==0)
+        Blue0=BLUE;
+
+    if(marked==1)
+        Blue1=BLUE;
+
+    if(marked==2)
+        Blue2=BLUE;
+
+    if(marked==3)
+        Blue3=BLUE;
+
+    if(marked==4)
+        Blue4=BLUE;
+
+    if(marked==5)
+        Blue5=BLUE;
+
+    if(marked==6)
+        Blue6=BLUE;
+
+
+    cout << (selectedOption == 0 ? SELECTED_COLOR : RESET_COLOR) << (selectedOption == 0 ? "-->   " : "      ") <<Blue0<< "Saturday\n\n"<<RESET_COLOR;
+    cout << (selectedOption == 1 ? SELECTED_COLOR : RESET_COLOR) << (selectedOption == 1 ? "-->   " : "      ") <<Blue1<< "Sunday\n\n"<<RESET_COLOR;
+    cout << (selectedOption == 2 ? SELECTED_COLOR : RESET_COLOR) << (selectedOption == 2 ? "-->   " : "      ") <<Blue2<< "Monday\n\n"<<RESET_COLOR;
+    cout << (selectedOption == 3 ? SELECTED_COLOR : RESET_COLOR) << (selectedOption == 3 ? "-->   " : "      ") <<Blue3<< "Tuesday\n\n"<<RESET_COLOR;
+    cout << (selectedOption == 4 ? SELECTED_COLOR : RESET_COLOR) << (selectedOption == 4 ? "-->   " : "      ") <<Blue4<< "Wednesday\n\n"<<RESET_COLOR;
+    cout << (selectedOption == 5 ? SELECTED_COLOR : RESET_COLOR) << (selectedOption == 5 ? "-->   " : "      ") <<Blue5<< "Thursday\n\n"<<RESET_COLOR;
+    cout << (selectedOption == 6 ? SELECTED_COLOR : RESET_COLOR) << (selectedOption == 6 ? "-->   " : "      ") <<Blue6<< "Friday\n\n"<<RESET_COLOR;
+    cout << (selectedOption == 7 ? EXIT_COLOR     : RESET_COLOR) << (selectedOption == 7 ? "-->   " : "      ") << "Generate Table\n\n"<<RESET_COLOR;
+}
+
+bool isWeekday(tm& date, string& weekday)
+{
+    if (weekday == "Sunday")
+    {
+        return date.tm_wday == 0;
+    }
+    else if (weekday == "Monday")
+    {
+        return date.tm_wday == 1;
+    }
+    else if (weekday == "Tuesday")
+    {
+        return date.tm_wday == 2;
+    }
+    else if (weekday == "Wednesday")
+    {
+        return date.tm_wday == 3;
+    }
+    else if (weekday == "Thursday")
+    {
+        return date.tm_wday == 4;
+    }
+    else if (weekday == "Friday")
+    {
+        return date.tm_wday == 5;
+    }
+    else if (weekday == "Saturday")
+    {
+        return date.tm_wday == 6;
+    }
+    return false;
+}
+
+
+void slowPrint(const string& text, int delay)
+{
+
+     for (int i = 0; i < text.length(); ++i)
+    {
+        cout << text[i] << flush;
+        this_thread::sleep_for(chrono::milliseconds(delay));
+    }
+}
+
+
+void GenerateTable_AddOption_CreateFile()
+{
+
+    system("cls");
+
+cout<<R"(
+   _____                                  _           _______      _      _
+  / ____|                                | |         |__   __|    | |    | |
+ | |  __   ___  _ __    ___  _ __   __ _ | |_   ___     | |  __ _ | |__  | |  ___
+ | | |_ | / _ \| '_ \  / _ \| '__| / _` || __| / _ \    | | / _` || '_ \ | | / _ \
+ | |__| ||  __/| | | ||  __/| |   | (_| || |_ |  __/    | || (_| || |_) || ||  __/
+  \_____| \___||_| |_| \___||_|    \__,_| \__| \___|    |_| \__,_||_.__/ |_| \___|
+
+)";
+
+
+    cout<<endl;
+    cout<<endl;
+    string start_date, end_date,subject_name;
+    cout<<"Enter the subject name: ";
+
+    getline(cin,subject_name);
+    cout<<endl;
+
+
+    cout << "Enter the starting date (dd-mm-yyyy): ";
+    cin >> start_date;
+
+    cout<<endl;
+
+    cout << "Enter the end date (dd-mm-yyyy)     : ";
+    cin >> end_date;
+
+
+    ofstream ExistingFile("Subject.txt", ios::app);
+    ofstream SubjectFile(subject_name+".txt");
+
+    ExistingFile<<subject_name<<"\n";//This line doesn't working as expected
+
+    const int numOptions = 8;
+    int selectedOption = 0;
+    char key;
+    int marked=-1;
+    int num_target_weekdays=0;
+    string target_weekdays[5];
+    int i=0;
+
+    do
+    {
+        displayweekday(selectedOption,marked);
+
+        key = getch();  // Get a single character without waiting for Enter
+
+        switch (key)
+        {
+            case 72:  // Up Arrow
+
+                OBJ.beep();
+                selectedOption = (selectedOption - 1 + numOptions) % numOptions;
+                break;
+            case 80:  // Down Arrow
+
+                OBJ.beep();
+                selectedOption = (selectedOption + 1) % numOptions;
+                break;
+            case 13 :
+
+                OBJ.beep();
+                marked = selectedOption;
+                num_target_weekdays++;
+
+                 switch (selectedOption)
+                 {
+                 case 0:
+                    target_weekdays[i]="Saturday";
+                    i++;
+                    break;
+
+                 case 1:
+                    target_weekdays[i]="Sunday";
+                    i++;
+                    break;
+
+                 case 2:
+                    target_weekdays[i]="Monday";
+                    i++;
+                    break;
+
+                 case 3:
+                    target_weekdays[i]="Tuesday";
+                    i++;
+                    break;
+
+                 case 4:
+                    target_weekdays[i]="Wednesday";
+                    i++;
+                    break;
+
+                 case 5:
+                    target_weekdays[i]="Thursday";
+                    i++;
+                    break;
+
+                 case 6:
+                    target_weekdays[i]="Friday";
+                    i++;
+                    break;
+                 }
+
+        }
+    }
+
+    while (!(selectedOption == 7 && key ==13));  // Enter key
+    OBJ.beep();
+
+    //----------------------------------------------//-------------------------------//------------------------------//-----
+
+    tm start_tm = {};
+    tm end_tm = {};
+
+    // Parse starting and ending dates
+    istringstream start_date_stream(start_date);
+    start_date_stream >> get_time(&start_tm, "%d-%m-%Y");
+
+    istringstream end_date_stream(end_date);
+    end_date_stream >> get_time(&end_tm, "%d-%m-%Y");
+
+    if (start_date_stream.fail() || end_date_stream.fail())
+    {
+        cerr << "Invalid date format. Please use dd-mm-yyyy format.\n";
+        exit(0);
+    }
+
+    time_t start_time = mktime(&start_tm);
+    time_t end_time = mktime(&end_tm);
+
+    if (start_time == -1 || end_time == -1)
+    {
+        cerr << "Invalid date range.\n";
+        exit(0);
+    }
+
+    // Loop through the date range and print the dates for the target weekdays
+    string temp = spaceprinter(103-(55-(subject_name.size()/2)+subject_name.size()));
+    string N1 = "+-------+--------------+-----------+-------------------------------------------+----------------+-------+";
+    string N2 = "|"+spaceprinter(55-(subject_name.size()/2))+subject_name+temp+"|";
+    string H1 = "+-------+--------------+-----------+-------------------------------------------+----------------+-------+";
+    string H2 = "| Index |    Date      |  Classes  |                 Topics                    |   Preparation  |  Note |";
+    string H3 = "+-------+--------------+-----------+-------------------------------------------+----------------+-------+";
+
+
+    slowPrint(N1);
+    cout<<endl;
+    SubjectFile<<N1<<"\n";
+
+    slowPrint(N2);
+    cout<<endl;
+    SubjectFile<<N2<<"\n";
+
+    slowPrint(H1);
+    cout<<endl;
+    SubjectFile<<H1<<"\n";
+
+    slowPrint(H2);
+    cout<<endl;
+    SubjectFile<<H2<<"\n";
+
+    slowPrint(H3);
+    cout<<endl;
+    SubjectFile<<H3<<"\n";
+
+    int j=1;
+    while (start_time <= end_time)
+    {
+        for (int i = 0; i < num_target_weekdays; i++)
+        {
+            if (isWeekday(start_tm, target_weekdays[i]) && j<10)
+            {
+
+                cout<<"|";
+                SubjectFile<<"|";
+
+                slowPrint(spaceprinter(3));
+                SubjectFile<<spaceprinter(3);
+
+                cout<<j;
+                SubjectFile<<j;
+
+                slowPrint(spaceprinter(3));
+                SubjectFile<<spaceprinter(3);
+
+                cout<<"|";
+                SubjectFile<<"|";
+
+                slowPrint(spaceprinter(1));
+                SubjectFile<<spaceprinter(1);
+
+                cout<<"[";
+                SubjectFile<<"[";
+
+                cout<<put_time(&start_tm, "%d-%m-%Y");
+                SubjectFile<<put_time(&start_tm, "%d-%m-%Y");
+
+                cout<<"]";
+                SubjectFile<<"]";
+
+                slowPrint(spaceprinter(1));
+                SubjectFile<<spaceprinter(1);
+
+                cout<<"|";
+                SubjectFile<<"|";
+
+                slowPrint(spaceprinter(2));
+                SubjectFile<<spaceprinter(2);
+
+                cout<<"Class ";
+                SubjectFile<<"Class ";
+
+                cout<<j;
+                SubjectFile<<j;
+
+                slowPrint(spaceprinter(2));
+                SubjectFile<<spaceprinter(2);
+
+                cout<<"|";
+                SubjectFile<<"|";
+
+                slowPrint(spaceprinter(43));
+                SubjectFile<<spaceprinter(43);
+
+                cout<<"|";
+                SubjectFile<<"|";
+
+                slowPrint(spaceprinter(16));
+                SubjectFile<<spaceprinter(16);
+
+                cout<<"|";
+                SubjectFile<<"|";
+
+                slowPrint(spaceprinter(7));
+                SubjectFile<<spaceprinter(7);
+
+                cout<<"|"<<endl;
+                SubjectFile<<"|\n";
+
+                slowPrint("+-------+--------------+-----------+-------------------------------------------+----------------+-------+",2);
+                SubjectFile<<"+-------+--------------+-----------+-------------------------------------------+----------------+-------+";
+
+                cout<<endl;
+                SubjectFile<<"\n";
+                //cout << put_time(&start_tm, "%d-%m-%Y")<< endl;
+                j++;
+            }
+
+        else if (isWeekday(start_tm, target_weekdays[i]) && j>=10)
+            {
+
+                cout<<"|";
+                SubjectFile<<"|";
+
+                slowPrint(spaceprinter(3));
+                SubjectFile<<spaceprinter(3);
+
+                cout<<j;
+                SubjectFile<<j;
+
+                slowPrint(spaceprinter(2));
+                SubjectFile<<spaceprinter(2);
+
+                cout<<"|";
+                SubjectFile<<"|";
+
+                slowPrint(spaceprinter(1));
+                SubjectFile<<spaceprinter(1);
+
+                cout<<"[";
+                SubjectFile<<"[";
+
+                cout<<put_time(&start_tm, "%d-%m-%Y");
+                SubjectFile<<put_time(&start_tm, "%d-%m-%Y");
+
+                cout<<"]";
+                SubjectFile<<"]";
+
+                slowPrint(spaceprinter(1));
+                SubjectFile<<spaceprinter(1);
+
+                cout<<"|";
+                SubjectFile<<"|";
+
+                slowPrint(spaceprinter(2));
+                SubjectFile<<spaceprinter(2);
+
+                cout<<"Class ";
+                SubjectFile<<"Class ";
+
+                cout<<j;
+                SubjectFile<<j;
+
+                slowPrint(spaceprinter(1));
+                SubjectFile<<spaceprinter(1);
+
+                cout<<"|";
+                SubjectFile<<"|";
+
+                slowPrint(spaceprinter(43));
+                SubjectFile<<spaceprinter(43);
+
+                cout<<"|";
+                SubjectFile<<"|";
+
+                slowPrint(spaceprinter(16));
+                SubjectFile<<spaceprinter(16);
+
+                cout<<"|";
+                SubjectFile<<"|";
+
+                slowPrint(spaceprinter(7));
+                SubjectFile<<spaceprinter(7);
+
+                cout<<"|"<<endl;
+                SubjectFile<<"|\n";
+
+                slowPrint("+-------+--------------+-----------+-------------------------------------------+----------------+-------+",2);
+                SubjectFile<<"+-------+--------------+-----------+-------------------------------------------+----------------+-------+";
+
+                cout<<endl;
+                SubjectFile<<"\n";
+                //cout << put_time(&start_tm, "%d-%m-%Y")<< endl;
+                j++;
+            }
+        }
+
+        // Increment the date by one day
+        start_time += 86400; // 86400 seconds in a day
+        tm* next_day_tm = localtime(&start_time);
+        start_tm = *next_day_tm;
+    }
+
+    Blue0=RESET_COLOR;
+    Blue1=RESET_COLOR;
+    Blue2=RESET_COLOR;
+    Blue3=RESET_COLOR;
+    Blue4=RESET_COLOR;
+    Blue5=RESET_COLOR;
+    Blue6=RESET_COLOR;
+
+    ExistingFile.close();
+    SubjectFile.close();
+
+
+    cout<<GREEN;
+    slowPrint("Table created successfully",5);
+    cout<<RESET_COLOR;
+    cout<<endl;
+    slowPrint("Creating a file.......",120);
+    cout<<endl;
+    slowPrint("Storing Data in the file.......",5);
+    cout<<endl;
+    cout<<GREEN;
+    slowPrint("All SET!",5);
+    cout<<RESET_COLOR;
+    cout<<endl;
+    slowPrint("Press Enter to continue",5);
+    char next;
+    next=getch();
+
+    cin.ignore();
+
+    if(next==13)
+    {
+        OBJ.beep();
+        StartMainMenu();
+    }
+
+
+}
+
+///********************///**********************************///*********************************///***************************************///
+///********************///**********************************///*********************************///***************************************///
+///********************///**********************************///*********************************///***************************************///
+///********************///**********************************///*********************************///***************************************///
+///********************///**********************************///*********************************///***************************************///
+///********************///**********************************///*********************************///***************************************///
+///********************///**********************************///*********************************///***************************************///
+///********************///**********************************///*********************************///***************************************///
+///********************///**********************************///*********************************///***************************************///
+///********************///**********************************///*********************************///***************************************///
+///********************///**********************************///*********************************///***************************************///
+///********************///**********************************///*********************************///***************************************///
+///********************///**********************************///*********************************///***************************************///
+
+
+//Setting For Sound*******
+void displaySoundOption(int selectedOption) {
+    system("cls");
+
+cout<<R"(
+   _____                           _
+  / ____|                         | |
+ | (___    ___   _   _  _ __    __| |
+  \___ \  / _ \ | | | || '_ \  / _` |
+  ____) || (_) || |_| || | | || (_| |
+ |_____/  \___/  \__,_||_| |_| \__,_|
+
+
+)";
+
+
+    cout<<endl;
+    cout<<"Select Sound Frquency: ";
+    cout << (selectedOption == 0 ? SELECTED_COLOR : RESET_COLOR) << (selectedOption == 0 ? "\t--> "     : "\t    ") << "100\n";
+    cout << (selectedOption == 1 ? SELECTED_COLOR : RESET_COLOR) << (selectedOption == 1 ? "\t\t\t--> " : "\t\t\t    ") << "200\n";
+    cout << (selectedOption == 2 ? SELECTED_COLOR : RESET_COLOR) << (selectedOption == 2 ? "\t\t\t--> " : "\t\t\t    ") << "300\n";
+    cout << (selectedOption == 3 ? SELECTED_COLOR : RESET_COLOR) << (selectedOption == 3 ? "\t\t\t--> " : "\t\t\t    ") << "500\n";
+    cout << (selectedOption == 4 ? SELECTED_COLOR : RESET_COLOR) << (selectedOption == 4 ? "\t\t\t--> " : "\t\t\t    ") << "1000\n";
+    cout << (selectedOption == 5 ? SELECTED_COLOR : RESET_COLOR) << (selectedOption == 5 ? "\t\t\t--> " : "\t\t\t    ") << "1500\n";
+    cout << (selectedOption == 6 ? SELECTED_COLOR : RESET_COLOR) << (selectedOption == 6 ? "\t\t\t--> " : "\t\t\t    ") << "2000\n"<<RESET_COLOR;
+    cout << (selectedOption == 7 ? SELECTED_COLOR : RESET_COLOR) << (selectedOption == 7 ? "\t\t\t--> " : "\t\t\t    ") << "OFF\n"<<RESET_COLOR;
+
+    printNewLine(10);
+
+    char down =25;
+    char up =24;
+    cout<<"   "<<SELECTED_COLOR<<"Enter"<<RESET_COLOR<<" Select";
+    cout<<" ";
+    cout<<"   "<<SELECTED_COLOR<<up<<" "<<RESET_COLOR;
+    cout<<"Go Up";
+    cout<<"  ";
+    cout<<"  "<<SELECTED_COLOR<<down<<" "<<RESET_COLOR;
+    cout<<"Go Down";
+
+
+
+}
+
+
+
+
+void SoundSimulationAndSelection()
+{
+    const int numOptions =8 ;
+    int selectedOption = 0;
+    char key;
+
+    do
+    {
+        displaySoundOption(selectedOption);
+
+        key = getch();  // Get a single character without waiting for Enter
+
+        switch (key)
+        {
+        case 72:  // Up Arrow
+            selectedOption = (selectedOption - 1 + numOptions) % numOptions;
+
+            if (selectedOption == 0)
+            {
+                OBJ.x=100;
+                OBJ.beep();
+            }
+            else if (selectedOption == 1)
+            {
+                OBJ.x=200;
+                OBJ.beep();
+            }
+            else if (selectedOption == 2)
+            {
+                OBJ.x=300;
+                OBJ.beep();
+            }
+            else if (selectedOption == 3)
+            {
+                OBJ.x=500;
+                OBJ.beep();
+            }
+            else if (selectedOption == 4)
+            {
+                OBJ.x=1000;
+                OBJ.beep();
+            }
+            else if (selectedOption == 5)
+            {
+                OBJ.x=1500;
+                OBJ.beep();
+            }
+            else if (selectedOption == 6)
+            {
+                OBJ.x=2000;
+                OBJ.beep();
+            }
+            else
+            {
+                OBJ.x=0;
+                OBJ.beep();
+            }
+            break;
+
+        case 80:  // Down Arrow
+            selectedOption = (selectedOption + 1) % numOptions;
+               if (selectedOption == 0)
+            {
+                OBJ.x=100;
+                OBJ.beep();
+            }
+            else if (selectedOption == 1)
+            {
+                OBJ.x=200;
+                OBJ.beep();
+            }
+            else if (selectedOption == 2)
+            {
+                OBJ.x=300;
+                OBJ.beep();
+            }
+            else if (selectedOption == 3)
+            {
+                OBJ.x=500;
+                OBJ.beep();
+            }
+            else if (selectedOption == 4)
+            {
+                OBJ.x=1000;
+                OBJ.beep();
+            }
+            else if (selectedOption == 5)
+            {
+                OBJ.x=1500;
+                OBJ.beep();
+            }
+            else if (selectedOption == 6)
+            {
+                OBJ.x=2000;
+                OBJ.beep();
+            }
+            else
+            {
+                OBJ.x=0;
+                OBJ.beep();
+            }
+            break;
+
+        case 77:
+            OBJ.beep();
+            break;
+
+        case 13:  // only for beep beep
+             OBJ.beep();
+            break;
+
+        case 8:  // Backsapce
+             OBJ.beep();
+             StartSetting();
+            break;
+        }
+    }
+
+    while (key != 13);  // Enter key
+
+    ofstream storeSound("Setting(Sound).txt");
+
+
+    switch (selectedOption)
+    {
+    case 0:
+        storeSound<<100;
+        break;
+    case 1:
+        storeSound <<200;
+        break;
+    case 2:
+        storeSound<<300;
+        break;
+    case 3:
+        storeSound <<500;
+        break;
+    case 4:
+        storeSound <<1000;
+        break;
+    case 5:
+        storeSound <<1500;
+        break;
+    case 6:
+        storeSound<<2000;
+        break;
+
+    case 7:
+        storeSound<<0;
+        break;
+
+
+    }
+    storeSound.close();
+    StartSetting();
+
+}
+
+
+void StartSound()
+{
+
+    ifstream GainSoundValue("Setting(Sound).txt");
+    int SelectedFrequency;
+    GainSoundValue>>SelectedFrequency;
+
+    OBJ.x=SelectedFrequency;
+    SoundSimulationAndSelection();
+
+    GainSoundValue.close();
+}
+
+void TurnOnSound()
+{
+    ifstream GainSoundValue("Setting(Sound).txt");
+    int SelectedFrequency;
+    GainSoundValue>>SelectedFrequency;
+
+    OBJ.x=SelectedFrequency;
+    GainSoundValue.close();
+}
+
+void displaySettingOption(int selectedOption)
+{
+    system("cls");
+
+cout<<R"(
+   _____        _    _    _
+  / ____|      | |  | |  (_)
+ | (___    ___ | |_ | |_  _  _ __    __ _
+  \___ \  / _ \| __|| __|| || '_ \  / _` |
+  ____) ||  __/| |_ | |_ | || | | || (_| |
+ |_____/  \___| \__| \__||_||_| |_| \__, |
+                                     __/ |
+                                    |___/
+)";
+
+
+
+    cout<<endl;
+    cout<<"Select Option: ";
+    cout << (selectedOption == 0 ? SELECTED_COLOR : RESET_COLOR) << (selectedOption == 0 ? "\t--> "     : "\t    ") <<"Change Sound\n\n";
+    cout << (selectedOption == 1 ? SELECTED_COLOR : RESET_COLOR) << (selectedOption == 1 ? "\t\t--> " : "\t\t    ") <<"Change Color\n\n";
+    cout << (selectedOption == 2 ? SELECTED_COLOR : RESET_COLOR) << (selectedOption == 2 ? "\t\t--> " : "\t\t    ") <<"Reset All Data\n"<<RESET_COLOR;
+
+
+    printNewLine(13);;
+    char down =25;
+    char up =24;
+    cout<<"   "<<SELECTED_COLOR<<"Enter"<<RESET_COLOR<<" Select";
+    cout<<" ";
+    cout<<"   "<<SELECTED_COLOR<<"Backspace"<<RESET_COLOR<<" Main Menu";
+    cout<<" ";
+    cout<<"   "<<SELECTED_COLOR<<up<<" "<<RESET_COLOR;
+    cout<<"Go Up";
+    cout<<"  ";
+    cout<<"  "<<SELECTED_COLOR<<down<<" "<<RESET_COLOR;
+    cout<<"Go Down";
+
+}
+
+void StartSetting()
+{
+    const int numOptions = 3;
+    int selectedOption = 0;
+    char key;
+
+    do
+    {
+        displaySettingOption(selectedOption);
+
+        key = getch();  // Get a single character without waiting for Enter
+
+        switch (key)
+        {
+        case 72:  // Up Arrow
+            selectedOption = (selectedOption - 1 + numOptions) % numOptions;
+            OBJ.beep();
+            break;
+        case 80:  // Down Arrow
+            selectedOption = (selectedOption + 1) % numOptions;
+            OBJ.beep();
+            break;
+
+        case 8:  // backspace
+            OBJ.beep();
+             StartMainMenu();
+            break;
+        }
+    }
+
+    while (key != 13);  // Enter key
+    OBJ.beep();
+
+    switch (selectedOption) {
+        case 0: StartSound(); break;
+        case 1: StartColor(); break;
+        case 2: ResetAll();  break;
+
+    }
+
+}
+///Color-------------------------------------------------------------------------------------------------
+
+
+void displayColorOption(int selectedOption) {
+    system("cls");
+
+cout<<SELECTED_COLOR<<R"(
+    ____         _
+  / ____|       | |
+ | |       ___  | |  ___   _   _  _ __
+ | |      / _ \ | | / _ \ | | | || '__|
+ | |____ | (_) || || (_) || |_| || |
+  \_____| \___/ |_| \___/  \__,_||_|
+
+
+)"<<RESET_COLOR;
+
+    cout<<endl;
+    cout<<SELECTED_COLOR<<"Select Color: "<<RESET_COLOR;
+    cout << (selectedOption == 0 ? Text_BLUE : RESET_COLOR) << (selectedOption == 0 ? "\t--> "   :"\t    ") << "BLUE\n";
+    cout << (selectedOption == 1 ? SELECTED_COLOR : RESET_COLOR) << (selectedOption == 1 ? "\t\t--> " : "\t\t    ") << "RED\n";
+    cout << (selectedOption == 2 ? SELECTED_COLOR : RESET_COLOR) << (selectedOption == 2 ? "\t\t--> " : "\t\t    ") << "GREEN\n";
+    cout << (selectedOption == 3 ? SELECTED_COLOR : RESET_COLOR) << (selectedOption == 3 ? "\t\t--> " : "\t\t    ") << "YELLOW\n"<<RESET_COLOR;;
+
+    printNewLine(14);
+
+    char down =25;
+    char up =24;
+    cout<<"   "<<SELECTED_COLOR<<"Enter"<<RESET_COLOR<<" Select";
+    cout<<" ";
+    cout<<"   "<<SELECTED_COLOR<<up<<" "<<RESET_COLOR;
+    cout<<"Go Up";
+    cout<<"  ";
+    cout<<"  "<<SELECTED_COLOR<<down<<" "<<RESET_COLOR;
+    cout<<"Go Down";
+
+
+}
+void ColorSimulationAndSelection()
+{
+    const int numOptions =4 ;
+    int selectedOption = 0;
+    char key;
+
+    do
+    {
+        displayColorOption(selectedOption);
+
+        key = getch();  // Get a single character without waiting for Enter
+
+        switch (key)
+        {
+        case 72:  // Up Arrow
+            OBJ.beep();
+            selectedOption = (selectedOption - 1 + numOptions) % numOptions;
+
+            if (selectedOption == 0)
+            {
+                SELECTED_COLOR=Text_BLUE;
+            }
+            else if (selectedOption == 1)
+            {
+                SELECTED_COLOR=Text_RED;
+            }
+            else if (selectedOption == 2)
+            {
+                SELECTED_COLOR=Text_GREEN;
+            }
+            else if (selectedOption == 3)
+            {
+                SELECTED_COLOR=Text_YELLOW;
+            }
+
+            break;
+
+        case 80:  // Down Arrow
+            OBJ.beep();
+            selectedOption = (selectedOption + 1) % numOptions;
+
+                 if (selectedOption == 0)
+            {
+                SELECTED_COLOR=Text_BLUE;
+            }
+            else if (selectedOption == 1)
+            {
+                SELECTED_COLOR=Text_RED;
+            }
+            else if (selectedOption == 2)
+            {
+                SELECTED_COLOR=Text_GREEN;
+            }
+            else if (selectedOption == 3)
+            {
+                SELECTED_COLOR=Text_YELLOW;
+            }
+
+            break;
+
+        }
+    }
+
+    while (key != 13);  // Enter key
+    OBJ.beep();
+
+    ofstream storeColor("Setting(Color).txt");
+    ofstream storeColor2("Setting(Color2).txt");
+
+
+    switch (selectedOption)
+    {
+    case 0:
+        storeColor<<"\033[1;34m";
+        storeColor2<<"\033[44m";;
+        break;
+    case 1:
+        storeColor<<"\033[1;31m";
+        storeColor2<<"\033[41m";;
+        break;
+    case 2:
+        storeColor<<"\033[1;32m";
+        storeColor2<<"\033[42m";;
+        break;
+    case 3:
+        storeColor<<"\033[1;33m";
+        storeColor2<<"\033[43m";;
+        break;
+    }
+
+    storeColor.close();
+    storeColor2.close();
+    TurnOnColor();
+    StartSetting();
+
+}
+
+void StartColor()
+{
+    ifstream GainColor("Setting(Color).txt");
+    ifstream GainColor2("Setting(Color2).txt");
+
+    string SELECTED_COLOR_Transfer;
+    string SELECTED_COLOR_Transfer2;
+
+    GainColor>>SELECTED_COLOR_Transfer;
+    GainColor2>>SELECTED_COLOR_Transfer2;
+
+    SELECTED_COLOR=SELECTED_COLOR_Transfer;
+
+    BLUE=SELECTED_COLOR_Transfer2;
+    GainColor.close();
+    GainColor2.close();
+
+    ColorSimulationAndSelection();
+}
+
+void TurnOnColor()
+{
+    ifstream GainColor("Setting(Color).txt");
+    ifstream GainColor2("Setting(Color2).txt");
+
+    string SELECTED_COLOR_Transfer;
+    string SELECTED_COLOR_Transfer2;
+
+    GainColor>>SELECTED_COLOR_Transfer;
+    GainColor2>>SELECTED_COLOR_Transfer2;
+
+    SELECTED_COLOR=SELECTED_COLOR_Transfer;
+
+    BLUE=SELECTED_COLOR_Transfer2;
+    GainColor.close();
+    GainColor2.close();
+}
+//Reset-----------------------------------------------
+
+void DeleteFile(string filename)
+{
+    filename=filename+".txt";
+
+    string Successful,Failed;
+
+
+    if (remove(filename.c_str()) == 0) {
+         system("cls");
+         Successful=" File '" + filename + "' successfully deleted.";
+         slowPrint(Successful,20);
+         cout<<endl;
+    } else {
+        system("cls");
+        Failed =" Error deleting file '" +filename+ "'.";
+        slowPrint(Failed,20);
+        cout<<endl;
+    }
+
+}
+
+void ResetAll()
+{
+    system("cls");
+    ifstream OpenForDelete("Subject.txt");
+
+    string t;
+
+    while(getline(OpenForDelete,t))
+    {
+        DeleteFile(t);
+    }
+
+    ofstream Reset("Subject.txt");
+
+    OpenForDelete.close();
+
+    Reset.close();
+
+    cout<<"Press Enter to continue....";
+    char t2;
+    t2=getch();
+    if(t2==13)
+    {
+    StartMainMenu();
+    }
+
+}
+
+//Game------------------------------------------------------------------------------------------------------------------------
+// Function to display ASCII art for an animal
+void displayAnimalArt( string animalArt)
+{
+    cout << "Guess the Animal!" << endl;
+
+    slowPrint(animalArt,3);
+    cout<<endl;
+}
+
+void Game()
+{
+
+
+    //Animal art
+    system("cls");
+
+    string bear1=R"(
+          (()__(()
+         /       \
+        ( /    \  \
+         \ o o    /
+         (_()_)__/ \
+        / _,==.____ \
+       (   |--|      )
+       /\_.|__|'-.__/\_
+      / (        /     \
+      \  \      (      /
+       )  '._____)    /
+    (((____.--(((____/
+
+                   )";
+
+    string bear2=R"(
+     _,-""`""-~`)
+    (`~_,=========\
+     |---,___.-.__,\
+     |        o     \ ___  _,,,,_     _.--.
+      \      `^`    /`_.-"~      `~-;`     \
+       \_      _  .'                 `,     |
+         |`-                           \'__/
+        /                      ,_       \  `'-.
+       /    .-""~~--.            `"-,   ;_    /
+      |              \               \  | `""`
+       \__.--'`"-.   /_               |'
+                  `"`  `~~~---..,     |
+                                 \ _.-'`-.
+                                  \       \
+                                   '.     /
+                                     `"~"`
+
+)";
+
+
+
+
+    string bat1=R"(
+                      _..-'(                       )`-.._
+                   ./'. '||\\.       (\_/)       .//||` .`\.
+                ./'.|'.'||||\\|..    )O O(    ..|//||||`.`|.`\.
+             ./'..|'.|| |||||\`````` '`"'` ''''''/||||| ||.`|..`\.
+           ./'.||'.|||| ||||||||||||.     .|||||||||||| |||||.`||.`\.
+          /'|||'.|||||| ||||||||||||{     }|||||||||||| ||||||.`|||`\
+         '.|||'.||||||| ||||||||||||{     }|||||||||||| |||||||.`|||.`
+        '.||| ||||||||| |/'   ``\||``     ''||/''   `\| ||||||||| |||.`
+        |/' \./'     `\./         \!|\   /|!/         \./'     `\./ `\|
+        V    V         V          }' `\ /' `{          V         V    V
+        `    `         `               V               '         '
+
+)";
+
+
+
+
+    string Came1=R"(
+                                                        =--_
+                                         .-""""""-.     |* _)
+                                        /          \   /  /
+                                       /            \_/  /
+           _                          /|                /
+       _-'"/\                        / |    ____    _.-"            _
+    _-'   (  '-_            _       (   \  |\  /\  ||           .-'".".
+_.-'       '.   `'-._   .-'"/'.      "   | |/ /  | |/        _-"   (   '-_
+             '.      _-"   (   '-_       \ | /   \ |     _.-'       )     "-._
+           _.'   _.-'       )     "-._    ||\\   |\\  '"'        .-'
+         '               .-'          `'  || \\  ||))
+   __  _  ___  _ ____________ _____  ___ _|\ _|\_|\\/ _______________  ___   _
+                       c  c  " c C ""C  " ""  "" ""
+                   c       C
+              C        C
+                   C
+    C     c
+
+)";
+
+
+    string cat1=R"(
+        _..---...,""-._     ,/}/)
+     .''        ,      ``..'(/-<
+    /   _      {      )         \
+   ;   _ `.     `.   <         a(
+ ,'   ( \  )      `.  \ __.._ .: y
+(  <\_-) )'-.____...\  `._   //-'
+ `. `-' /-._)))      `-._)))
+   `...'
+
+)";
+
+    string cow1=R"(
+
+              (      )
+              ~(^^^^)~
+               ) @@ \~_          |\
+              /     | \        \~ /
+             ( 0  0  ) \        | |
+              ---___/~  \       | |
+               /'__/ |   ~-_____/ |
+o          _   ~----~      ___---~
+  O       //     |         |
+         ((~\  _|         -|
+   o  O //-_ \/ |        ~  |
+        ^   \_ /         ~  |
+               |          ~ |
+               |     /     ~ |
+               |     (       |
+                \     \      /\
+               / -_____-\   \ ~~-*
+               |  /       \  \
+               / /         / /
+             /~  |       /~  |
+             ~~~~        ~~~~
+
+)";
+
+    string cow2=R"(
+
+          .=     ,        =.
+  _  _   /'/    )\,/,/(_   \ \
+   `//-.|  (  ,\\)\//\)\/_  ) |
+   //___\   `\\\/\\/\/\\///'  /
+,-"~`-._ `"--'_   `"""`  _ \`'"~-,_
+\       `-.  '_`.      .'_` \ ,-"~`/
+ `.__.-'`/   (-\        /-) |-.__,'
+   ||   |     \O)  /^\ (O/  |
+   `\\  |         /   `\    /
+     \\  \       /      `\ /
+      `\\ `-.  /' .---.--.\
+        `\\/`~(, '()      ('
+         /(O) \\   _,.-.,_)
+        //  \\ `\'`      /
+       / |  ||   `""""~"`
+     /'  |__||
+           `o
+
+)";
+
+    string deer1=R"(
+   /|       |\
+`__\\       //__'
+   ||      ||
+ \__`\     |'__/
+   `_\\   //_'
+   _.,:---;,._
+   \_:     :_/
+     |@. .@|
+     |     |
+     ,\.-./ \
+     ;;`-'   `---__________-----.-.
+     ;;;                         \_\
+     ';;;                         |
+      ;    |                      ;
+       \   \     \        |      /
+        \_, \    /        \     |\
+          |';|  |,,,,,,,,/ \    \ \_
+          |  |  |           \   /   |
+          \  \  |           |  / \  |
+           | || |           | |   | |
+           | || |           | |   | |
+           | || |           | |   | |
+           |_||_|           |_|   |_|
+          /_//_/           /_/   /_/
+
+
+)";
+
+    string dog1=R"(
+
+       ,_____ ,
+      ,._ ,_. 7\
+     j `-'     /
+     |o_, o    \
+    .`_y_`-,'   !
+    |/   `, `._ `-,
+    |_     \   _.'*\
+      >--,-'`-'*_*'``---.
+      |\_* _*'-'         '
+     /    `               \
+     \.         _ .       /
+      '`._     /   )     /
+       \  |`-,-|  /c-'7 /
+        ) \ (_,| |   / (_
+       ((_/   ((_;)  \_)))
+
+)";
+
+    string dolphin1=R"(
+                                          .--.
+                    _______             .-"  .'
+            .---u"""       """"---._  ."    %
+          .'                        "--.    %
+     __.--'  o                          "".. "
+    (____.                                  ":
+     `----.__                                 ".
+             `----------__                     ".
+                   ".   . ""--.                 ".
+                     ". ". bIt ""-.              ".
+                       "-.)        ""-.           ".
+                                       "".         ".
+                                          "".       ".
+                                             "".      ".
+                                                "".    ".
+                          ^~^~^~^~^~^~^~^~^~^~^~^~^"".  "^~^~^~^~^
+                                                ^~^~^~^  ~^~
+                                                     ^~^~^~
+
+)";
+
+    string elephant1=R"(
+
+                          .' `'.__
+                         /      \ `'"-,
+        .-''''--...__..-/ .     |      \
+      .'               ; :'     '.  a   |
+     /                 | :.       \     =\
+    ;                   \':.      /  ,-.__;.-;`
+   /|     .              '--._   /-.7`._..-;`
+  ; |       '                |`-'      \  =|
+  |/\        .   -' /     /  ;         |  =/
+  (( ;.       ,_  .:|     | /     /\   | =|
+   ) / `\     | `""`;     / |    | /   / =/
+     | ::|    |      \    \ \    \ `--' =/
+    /  '/\    /       )    |/     `-...-`
+   /    | |  `\    /-'    /;
+   \  ,,/ |    \   |    .'  \
+    `""`   \       |_.-'L__nnh
+            `"""`
+
+)";
+
+    string elephant2=R"(
+     __
+    '. \
+     '- \
+      / /_         .---.
+     / | \\,.\/--.//    )
+     |  \//        )/  /
+      \  ' ^ ^    /    )____.----..  6
+       '.____.    .___/            \._)
+          .\/.                      )
+           '\                       /
+           _/ \/    ).        )    (
+          /#  .!    |        /\    /
+          \  C// #  /'-----''/ #  /
+       .   'C/ |    |    |   |    |     ,
+       \), .. .'OOO-'. ..'OOO'OOO-'. ..\(,
+
+)";
+
+    string frog1=R"(
+
+           ____  __.---""---.__  ____
+          /####\/              \/####\
+         (   /\ )              ( /\   )
+         \____/                \____/
+        __/                          \__
+     .-"    .                      .    "-.
+     |  |   \.._                _../   |  |
+      \  \    \."-.__________.-"./    /  /
+        \  \    "--.________.--"    /  /
+      ___\  \_                    _/  /___
+    ./    )))))                  (((((    \.
+    \                                      /
+     \           \_          _/           /
+       \    \____/""-.____.-""\____/    /
+         \    \                  /    /
+          \.  .|                |.  ./
+        ." / |  \              /  | \  ".
+     ."  /   |   \            /   |   \   ".
+    /.-./.--.|.--.\          /.--.|.--.\.-.|
+
+)";
+
+    string horse1=R"(
+
+                                     |\    /|
+                                  ___| \,,/_/
+                               ---__/ \/    \
+                              __--/     (D)  \
+                              _ -/    (_      \
+                             // /       \_ /  -\
+       __-------_____--___--/           / \_ O o)
+      /                                 /   \__/
+     /                                 /
+    ||          )                   \_/\
+    ||         /              _      /  |
+    | |      /--______      ___\    /\  :
+    | /   __-  - _/   ------    |  |   \ \
+     |   -  -   /                | |     \ )
+     |  |   -  |                 | )     | |
+      | |    | |                 | |    | |
+      | |    < |                 | |   |_/
+      < |    /__\                <  \
+      /__\                       /___\
+
+)";
+
+    string horse2=R"(
+
+           @@@@@@
+        @@@@@@@@@@@@@a
+      @@@@@@@@@@@@@@@@@@
+    @@@@@@@@@@@@@@@@@@@@@@
+    @@@@@@@@@@@@@@@@@@@@@@
+     `@@@@@@`\\//'@@@@@@'
+          ,,  ||  ,,
+         /(-\ || /.)\
+    ,---' /`-'||`-'\ `----,
+   /( )__))   ||   ((,==( )\
+_ /_//___\\ __|| ___\\ __\\ ____
+    ``    `` /  \   ''   ''
+
+)";
+
+    string rabbit1=R"(
+             ,
+            /|      __
+           / |   ,-~ /
+          Y :|  //  /
+          |  | /( .^
+          >-"~"--"
+         /       |
+        /o  o    |
+       ( ~T~     j
+        >._-' _./
+       /   "~"  |
+      /     _,  |
+     /| ;-"~ _  l
+    / l/ ,-"~    \
+    \//\/      .- \
+     |        /    |
+     |       |     |
+     |\      _\    /"\
+    (" ~----( ~   /.  )
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+)";
+
+    string rabbit2=R"(
+         / \
+        / _ \
+       | / \ |
+       ||   || _______
+       ||   || |\     \
+       ||   || ||\     \
+       ||   || || \    |
+       ||   || ||  \__/
+       ||   || ||   ||
+        \\_/ \_/ \_//
+       /   _     _   \
+      /               \
+      |    O     O    |
+      |   \  ___  /   |
+     /     \ \_/ /     \
+    /  -----  |  -----  \
+    |     \__/|\__/     |
+    \       |_|_|       /
+     \_____       _____/
+           \     /
+           |     |
+
+)";
+
+    string Scorpion1=R"(
+
+      /|  |\            /|  |\
+      /|  |\            /|  |\
+     / |  | \          / |  | \
+     | |  | |          | |  | |
+     \  \/  /  __  __  \  \/  /
+      \    /  / /  \ \  \    /
+       \  /   \ \__/ /   \  /
+       \  /   /      \   \  /
+      _ \ \__/ O    O \__/ / _
+      \\ \___          ___/ //
+    _  \\___/  ______  \___//  _
+    \\  ----(          )----  //
+     \\_____( ________ )_____//
+      ~-----(          )-----~ _
+       _____( ________ )_____  \\
+      /,----(          )----  _//
+     //     (  ______  )     /  \
+     ~       \        /      \  /
+              \  __  /       / /
+               \    /       / /
+                \   \      / /
+                 \   ~----~ /
+                  \________/
+
+)";
+
+    string spider1=R"(
+                                   _
+       /      \         __      _\( )/_
+    \  \  ,,  /  /   | /  \ |    /(O)\
+     '-.`\()/`.-'   \_\\  //_/    _.._   _\(o)/_  //  \\
+    .--_'(  )'_--.   .'/()\'.   .'    '.  /(_)\  _\\()//_
+   / /` /`""`\ `\ \   \\  //   /   __   \       / //  \\ \
+    |  |  ><  |  |          ,  |   ><   |  ,     | \__/ |
+    \  \      /  /         . \  \      /  / .              _
+   _    '.__.'    _\(O)/_   \_'--`(  )'--'_/     __     _\(_)/_
+_\( )/_            /(_)\      .--'/()\'--.    | /  \ |   /(O)\
+ /(O)\  //  \\         _     /  /` '' `\  \  \_\\  //_/
+       _\\()//_     _\(_)/_    |        |      //()\\
+      / //  \\ \     /(o)\      \      /       \\  //
+       | \__/ |
+
+)";
+
+    string spider2=R"(
+
+           ____                      ,
+          /---.'.__             ____//
+               '--.\           /.---'
+          _______  \\         //
+        /.------.\  \|      .'/  ______
+       //  ___  \ \ ||/|\  //  _/_----.\__
+      |/  /.-.\  \ \:|< >|// _/.'..\   '--'
+         //   \'. | \'.|.'/ /_/ /  \\
+        //     \ \_\/" ' ~\-'.-'    \\
+       //       '-._| :H: |'-.__     \\
+      //           (/'==='\)'-._\     ||
+      ||                        \\    \|
+      ||                         \\    '
+      |/                          \\
+                                   ||
+                                   ||
+                                   \\
+                                    '
+
+)";
+
+    string wolf11=R"(
+                         .
+                        / V\
+                       / `  /
+                     <<   |
+                     /    |
+                   /      |
+                 /        |
+               /    \  \ /
+              (      ) | |
+      ________|   _/_  | |
+    <__________\______)\__)
+
+)";
+
+    string Monkey1=R"(
+
+               .-"""-.
+             _/-=-.   \
+            (_|a a/   |_
+             / "  \   ,_)
+        _    \`=' /__/
+       / \_  .;--'  `-.
+       \___)//      ,  \
+        \ \/;        \  \
+         \_.|         | |
+          .-\ '     _/_/
+        .'  _;.    (_  \
+       /  .'   `\   \\_/
+      |_ /       |  |\\
+     /  _)       /  / ||
+    /  /       _/  /  //
+    \_/       ( `-/  ||
+              /  /   \\ .-.
+              \_/     \'-'/
+                       `"`
+)";
+
+    string tortoise1=R"(
+                                 ___-------___
+                             _-~~             ~~-_
+                          _-~                    /~-_
+       /^\__/^\         /~  \                   /    \
+     /|  O|| O|        /      \_______________/        \
+    | |___||__|      /       /                \          \
+    |          \    /      /                    \          \
+    |   (_______) /______/                        \_________ \
+    |         / /         \                      /            \
+     \         \^\\         \                  /               \     /
+       \         ||           \______________/      _-_       //\__//
+         \       ||------_-~~-_ ------------- \ --/~   ~\    || __/
+           ~-----||====/~     |==================|       |/~~~~~
+            (_(__/  ./     /                    \_\      \.
+                   (_(___/                         \_____)_)
+
+)";
+
+
+    // Seed the random number generator
+    srand(static_cast<unsigned int>(time(nullptr)));
+
+    // Define an inventory of animals with their ASCII art
+    vector<pair<string, string>> animalInventory =
+    {
+        {"bear", bear1},
+        {"bear", bear2},
+        {"bat", bat1},
+        {"camel", Came1},
+        {"cat", cat1},
+        {"cow", cow1},
+        {"deer", deer1},
+        {"dog", dog1},
+        {"dolphin", dolphin1},
+        {"elephant", elephant1},
+        {"elephant", elephant2},
+        {"frog", frog1},
+        {"horse", horse1},
+        {"horse", horse2},
+        {"rabbit", rabbit1},
+        {"rabbit", rabbit2},
+        {"scorpion", Scorpion1},
+        {"spider", spider1},
+        {"spider", spider2},
+        {"wolf", wolf11},
+        {"monkey", Monkey1},
+        {"tortoise", tortoise1}
+    };
+
+    // Randomly select an animal from the inventory
+    int randomIndex = rand() % animalInventory.size();
+    string correctAnswer = animalInventory[randomIndex].first;
+    string animalArt = animalInventory[randomIndex].second;
+
+    // Display the ASCII art of the selected animal
+    displayAnimalArt(animalArt);
+
+    // Ask the user to guess the animal's name
+    cout << "  Guess the name of the animal? \n\n";
+    cout<<"  Your Answer: ";
+    string userGuess;
+    cin >> userGuess;
+
+    // Converting the user's guess to lowercase
+    for (int i = 0; i < userGuess.length(); ++i)
+    {
+        userGuess[i] = tolower(userGuess[i]);
+    }
+
+
+    // Check if the user's guess is correct
+    if (userGuess == correctAnswer)
+    {
+        cout<<endl;
+        cout<<Text_GREEN;
+        cout << "  Congratulations! You guessed correctly. It's a " << correctAnswer << "!" << endl;
+        cout<<RESET_COLOR;
+        cout << endl;
+        cout<<Text_YELLOW;
+        slowPrint("  Here is some interesting fact about " + correctAnswer + ":\n");
+        cout<<RESET_COLOR;
+        cout << endl;
+
+        if(correctAnswer=="bear")
+        {
+            slowPrint("  1. Bears are skilled hibernators, capable of going months without eating or drinking.\n\n");
+            slowPrint("  2. Bears are omnivores with diverse diets, eating everything from berries to fish.\n\n");
+            slowPrint("  3. They're strong swimmers, with polar bears being particularly adept.\n\n");
+            slowPrint("  4. Many bear species are territorial and use scent marking.\n\n");
+            slowPrint("  5. There are different bear species worldwide, each with unique features.\n\n");
+
+        }
+
+        if(correctAnswer=="bat")
+        {
+            slowPrint("  1. Bats are the only mammals capable of sustained flight.\n\n");
+            slowPrint("  2. They have diverse diets, including nectar-feeding and insect-eating.\n\n");
+            slowPrint("  3. Many bats use echolocation for navigation and hunting.\n\n");
+            slowPrint("  4. Some bat species have impressively long lifespans.\n\n");
+            slowPrint("  5. Bats play a vital role in ecosystems through pollination and pest control.\n\n");
+
+        }
+
+        if(correctAnswer=="camel")
+        {
+            slowPrint("  1. Camels are well adapted to arid environments with features like humps that store fat, helping them survive\n");
+            slowPrint("     long periods without water.\n\n");
+            slowPrint("  2. There are two main species of camels: dromedaries, with one hump, and Bactrian camels, with two humps.\n\n");
+            slowPrint("  3. Camels are strong and versatile animals used for transportation, carrying heavy loads, and even racing.\n\n");
+            slowPrint("  4. They can drink up to 40 gallons of water in one go when they rehydrate after long periods without water.\n\n");
+            slowPrint("  5. Camels have a unique walking gait, moving left legs and then both right legs simultaneously, which helps them\n");
+            slowPrint("     conserve energy in the desert.\n\n");
+
+        }
+
+        if(correctAnswer=="cat")
+        {
+
+            slowPrint("  1. Cats have retractable claws, which they use for climbing and hunting, and they can extend them when needed.\n\n");
+            slowPrint("  2. A cat's purring can have a calming effect on humans and is often used as a form of self-soothing.\n\n");
+            slowPrint("  3. The world's oldest known pet cat was found in a 9,500-year-old grave on the Mediterranean island of Cyprus.\n\n");
+            slowPrint("  4. Cats have a keen sense of hearing, capable of detecting high-pitched sounds and even ultrasonic frequencies.\n\n");
+            slowPrint("  5. Domestic cats are crepuscular, meaning they are most active during dawn and dusk, which aligns with their natural");
+            slowPrint(" hunting instincts.\n\n");
+
+        }
+
+        if(correctAnswer=="cow")
+        {
+
+            slowPrint("  1. Cows have a four-chambered stomach to help digest their plant-based diet.\n\n");
+            slowPrint("  2. They communicate with each other through various vocalizations and body language.\n\n");
+            slowPrint("  3. A cow's spots are like fingerprints, each one is unique.\n\n");
+            slowPrint("  4. They have an excellent sense of smell and can detect scents from up to six miles away.\n\n");
+            slowPrint("  5. Cows have a strong maternal instinct, forming close bonds with their calves.\n\n");
+
+        }
+
+        if(correctAnswer=="deer")
+        {
+
+            slowPrint("  1. Deer are fast runners, reaching up to 45 mph.\n\n");
+            slowPrint("  2. Male deer grow and shed antlers annually\n\n");
+            slowPrint("  3. They are skilled swimmers.\n\n");
+            slowPrint("  4. Use vocalizations like grunts and bleats for communication.\n\n");
+            slowPrint("  5. Specialized four-compartment stomach for plant-based diet digestion.\n\n");
+
+        }
+        if(correctAnswer=="dog")
+        {
+
+            slowPrint("  1. Dogs have an incredible sense of smell.\n\n");
+            slowPrint("  2. There are over 340 dog breeds.\n\n");
+            slowPrint("  3. Dogs communicate with body language.\n\n");
+            slowPrint("  4. Puppies are born blind and deaf.\n\n");
+            slowPrint("  5. Dogs have been domesticated for thousands of years.\n\n");
+
+
+        }
+
+        if(correctAnswer=="dolphin")
+        {
+
+            slowPrint("  1. Dolphins are highly intelligent marine mammals.\n\n");
+            slowPrint("  2. They use echolocation for navigation.\n\n");
+            slowPrint("  3. Some species can swim at 60 km/h.\n\n");
+            slowPrint("  4. Dolphins have complex social structures.\n\n");
+            slowPrint("  5. They communicate with clicks and whistles.\n\n");
+        }
+
+        if(correctAnswer=="elephant")
+        {
+
+            slowPrint("  1. Elephants are the largest land animals.\n\n");
+            slowPrint("  2. They have excellent memory and intelligence.\n\n");
+            slowPrint("  3. Elephants use their trunks for various tasks.\n\n");
+            slowPrint("  4. Social animals with strong family bonds.\n\n");
+            slowPrint("  5. Can communicate using infra sound calls.\n\n");
+
+
+
+        }
+
+        if(correctAnswer=="frog")
+        {
+
+            slowPrint("  1. Frogs have permeable skin.\n\n");
+            slowPrint("  2. Some frogs can change color.\n\n");
+            slowPrint("  3. They are indicator species for environmental health.\n\n");
+            slowPrint("  4. Male frogs often sing to attract mates.\n\n");
+            slowPrint("  5. Tadpoles are herbivores; adults eat insects.\n\n");
+
+        }
+
+        if(correctAnswer=="horse")
+        {
+
+            slowPrint("  1. Horses have excellent memory.\n\n");
+            slowPrint("  2. A horse's heart weighs about 10 pounds.\n\n");
+            slowPrint("  3. Horses can sleep standing up.\n\n");
+            slowPrint("  4. They can run shortly after birth.\n\n");
+            slowPrint("  5. A horse's hooves never stop growing.\n\n");
+
+
+        }
+
+        if(correctAnswer=="rabbit")
+        {
+
+            slowPrint("  1. Rabbits are prolific breeders.\n\n");
+            slowPrint("  2. They have a keen sense of smell.\n\n");
+            slowPrint("  3. Rabbits are crepuscular animals.\n\n");
+            slowPrint("  4. Their teeth never stop growing.\n\n");
+            slowPrint("  5. Bunnies are born blind and hairless.\n\n");
+
+
+        }
+
+        if(correctAnswer=="scorpion")
+        {
+
+            slowPrint("  1. Scorpions fluoresce under UV light.\n\n");
+            slowPrint("  2. They have a long lifespan.\n\n");
+            slowPrint("  3. Scorpions are ancient arachnids.\n\n");
+            slowPrint("  4. Venom varies among species.\n\n");
+            slowPrint("  5. They can go without food for months.\n\n");
+
+        }
+        if(correctAnswer=="spider")
+        {
+
+            slowPrint("  1. Spiders are arachnids, not insects.\n\n");
+            slowPrint("  2. They produce silk for webs.\n\n");
+            slowPrint("  3. Some are highly venomous.\n\n");
+            slowPrint("  4. Most spiders are solitary.\n\n");
+            slowPrint("  5. Essential for controlling insect populations.\n\n");
+
+
+        }
+
+        if(correctAnswer=="wolf")
+        {
+
+            slowPrint("  1. Wolves are highly social animals\n\n");
+            slowPrint("  2. Exceptional teamwork in hunting.\n\n");
+            slowPrint("  3. Powerful and intelligent predators.\n\n");
+            slowPrint("  4. Howl to communicate over long distances.\n\n");
+            slowPrint("  5. Wolves play a vital role in ecosystems.\n\n");
+
+        }
+
+        if(correctAnswer=="monkey")
+        {
+
+            slowPrint("  1. Monkeys are highly intelligent primates.\n\n");
+            slowPrint("  2. Varied diets, from fruits to insects.\n\n");
+            slowPrint("  3. Many species live in social groups.\n\n");
+            slowPrint("  4. Diverse habitats worldwide.\n\n");
+            slowPrint("  5. Excellent climbers with prehensile tails.\n\n");
+
+        }
+
+        if(correctAnswer=="tortoise")
+        {
+
+            slowPrint("  1. Tortoises are long-lived, some over 100 years.\n\n");
+            slowPrint("  2. Herbivores with slow metabolism.\n\n");
+            slowPrint("  3. Protected by a hard, bony shell.\n\n");
+            slowPrint("  4. Ancient reptiles with no teeth.\n\n");
+            slowPrint("  5. Can survive without water for extended periods.\n\n");
+
+
+        }
+    }
+
+
+
+    else
+    {
+        cout<<endl;
+
+        cout<<Text_RED;
+        string t1 = "  Sorry, that's not correct. The correct answer is: "+correctAnswer+".";
+        slowPrint(t1);
+        cout<<endl;
+        cout<<RESET_COLOR;
+        cout<<endl;
+
+        cout<<Text_YELLOW;
+        string t2="  You will not be informed about any interesting fact about "+correctAnswer;
+        slowPrint(t2);
+        cout<<endl;
+        cout<<RESET_COLOR;
+    }
+
+    cout<<endl;
+    cout<<endl;
+    cout<<endl;
+    cout<<endl;
+    cout<<"  Press "<<CYAN_BG <<" Enter "<<RESET_COLOR<<" to play again."<<endl;
+    cout<<endl;
+    cout<<"  Press " <<RED<<" ESC "<<RESET_COLOR<<" to got to Main Menu."<<endl;
+
+    char ch;
+
+    ch=getch();
+
+    cin.ignore();
+    if(ch==13)
+    {
+        Game();
+    }
+
+    if(ch==27)
+    {
+        StartMainMenu();
+    }
+    else
+    {
+        StartMainMenu();
+    }
+
+
+}
+
+//----- Last build'
+
+void displayCreateDeleteSubjectOption(int selectedOption)
+{
+    system("cls");
+
+    cout<<R"(
+   _____                _             __  _____       _      _              _____       _     _           _
+  / ____|              | |           / / |  __ \     | |    | |            / ____|     | |   (_)         | |
+ | |     _ __ ___  __ _| |_ ___     / /  | |  | | ___| | ___| |_ ___      | (___  _   _| |__  _  ___  ___| |_
+ | |    | '__/ _ \/ _` | __/ _ \   / /   | |  | |/ _ \ |/ _ \ __/ _ \      \___ \| | | | '_ \| |/ _ \/ __| __|
+ | |____| | |  __/ (_| | ||  __/  / /    | |__| |  __/ |  __/ ||  __/      ____) | |_| | |_) | |  __/ (__| |_
+  \_____|_|  \___|\__,_|\__\___| /_/     |_____/ \___|_|\___|\__\___|     |_____/ \__,_|_.__/| |\___|\___|\__|
+                                                                                            _/ |
+                                                                                           |__/
+
+)";
+
+
+    cout<<endl;
+    cout << (selectedOption == 0 ? SELECTED_COLOR : RESET_COLOR) << (selectedOption == 0 ? "\t--> " : "\t    ") << "Create a Subject\n\n\n";
+    cout << (selectedOption == 1 ? SELECTED_COLOR : RESET_COLOR) << (selectedOption == 1 ? "\t--> " : "\t    ") << "Delete a Subject\n"<<RESET_COLOR;
+
+    printNewLine(13);
+    char down =25;
+    char up =24;
+    cout<<"   "<<SELECTED_COLOR<<"Enter"<<RESET_COLOR<<" Select";
+    cout<<" ";
+    cout<<"   "<<SELECTED_COLOR<<"Backspace"<<RESET_COLOR<<" Main Menu";
+    cout<<" ";
+    cout<<"   "<<SELECTED_COLOR<<up<<" "<<RESET_COLOR;
+    cout<<"Go Up";
+    cout<<"  ";
+    cout<<"  "<<SELECTED_COLOR<<down<<" "<<RESET_COLOR;
+    cout<<"Go Down";
+
+}
+
+
+
+void StartCreateDeleteSubject()
+{
+    const int numOptions = 2;
+    int selectedOption = 0;
+    char key;
+
+    do
+    {
+        displayCreateDeleteSubjectOption(selectedOption);
+
+        key = getch();  // Get a single character without waiting for Enter
+
+        switch (key)
+        {
+        case 72:  // Up Arrow
+            selectedOption = (selectedOption - 1 + numOptions) % numOptions;
+            OBJ.beep();
+            break;
+        case 80:  // Down Arrow
+            selectedOption = (selectedOption + 1) % numOptions;
+            OBJ.beep();
+            break;
+
+        case 8:  // backspace
+            OBJ.beep();
+             StartMainMenu();
+            break;
+        }
+    }
+
+    while (key != 13);  // Enter key
+    OBJ.beep();
+
+    switch (selectedOption) {
+        case 0: GenerateTable_AddOption_CreateFile(); break;
+        case 1:  DeleteSingleSubject(); break;
+
+    }
+
+}
+
+void DeleteSingleSubject()
+{
+    string FiletoDelete = SubjectSelectLine("Subject.txt");
+    DeleteFile(FiletoDelete);
+    RemoveSubjectnameFromSubject(FiletoDelete);
+    StartCreateDeleteSubject();
+
+}
+
+void RemoveSubjectnameFromSubject(string name)
+{
+
+
+    // Open the text file for reading
+    ifstream inFile("Subject.txt");
+
+    // Create a temporary file to write the modified content
+    ofstream tempFile("temp.txt");
+
+
+    string line;
+    bool removed = false;
+
+    // Read the input file line by line
+    while (getline(inFile, line))
+        {
+        if (line != name || removed)
+         {
+            // Write the line to the temporary file if it doesn't match the user input
+            tempFile << line << endl;
+        } else {
+            removed = true;
+            //tempFile<<"\n";
+        }
+    }
+
+    inFile.close();
+    tempFile.close();
+
+    ofstream Recieve("Subject.txt");
+    ifstream Source("temp.txt");
+
+
+    string line2;
+    while(getline(Source,line))
+    {
+       Recieve<<line<<endl;
+    }
+
+    // Close the input and temporary files
+    Source.close();
+    Recieve.close();
+
+    // Delete the original file
+    remove("temp.txt");
+
+
+
+
+   //"Line removed successfully."
+}
+
+//Wait for the update
+void EnterTodaysInfo()
+{
+    system("cls");
+
+    cout<<R"(
+
+  ______       _              _______        _             _         _____        __
+ |  ____|     | |            |__   __|      | |           ( )       |_   _|      / _|
+ | |__   _ __ | |_ ___ _ __     | | ___   __| | __ _ _   _|/ ___      | |  _ __ | |_ ___
+ |  __| | '_ \| __/ _ \ '__|    | |/ _ \ / _` |/ _` | | | | / __|     | | | '_ \|  _/ _ \
+ | |____| | | | ||  __/ |       | | (_) | (_| | (_| | |_| | \__ \    _| |_| | | | || (_) |
+ |______|_| |_|\__\___|_|       |_|\___/ \__,_|\__,_|\__, | |___/   |_____|_| |_|_| \___/
+                                                      __/ |
+                                                     |___/
+
+
+)";
+
+    cout<<Text_RED;
+    slowPrint("   This feature is not available now");
+    cout<<RESET_COLOR;
+    cout<<endl;
+    cout<<endl;
+    printNewLine(14);
+    slowPrint("   Press "+SELECTED_COLOR+"any key"+RESET_COLOR+" to return to main menu ");
+
+
+    char t;
+    t=getch();
+
+    //cin.ignore();
+    if(t==13)
+    {
+        OBJ.beep();
+        StartMainMenu();
+    }
+    else
+    {
+     OBJ.beep();
+      StartMainMenu();
+    }
+}
+
+//22-Oct-2023-------------------------------------------
+
+void printNewLine(int num)
+{
+    for(int i=0;i<num;i++)
+    {
+        cout<<"\n";
+    }
+}
